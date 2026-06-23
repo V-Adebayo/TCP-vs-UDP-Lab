@@ -25,7 +25,7 @@ I filtered down to just one TCP conversation instead of the whole `tcp` filter, 
 
 A lot of the packets show up as **HTTP : Continuation**. At first I thought something was wrong, but that's actually normal  it just means the data being sent was too big to fit in one packet, so it got broken into multiple TCP segments. After each chunk, my machine sends back a TCP **[ACK]** confirming it got that piece, and the Ack number keeps increasing each time (2561, 5121, 7681, 10241...). That's the part that actually shows TCP doing its job making sure every piece of data is accounted for and arrives in order.
 
-Screenshot: `screenshots/tcp-traffic.png`
+![TCP Traffic](screenshots/tcp-traffic.png)
 
 ## UDP Analysis
 Filter used: `udp`
@@ -34,7 +34,7 @@ For UDP I expected to mostly see DNS, and I did — there's a clean example near
 
 But scrolling further down I also saw a bunch of **QUIC** traffic. I didn't expect this at first, but QUIC is actually built on top of UDP.it's used by a lot of sites now (Bing in my capture) instead of regular TCP+TLS, mainly because it's faster. So my UDP capture actually shows two different things: simple DNS lookups, and QUIC, which is a more modern protocol still using UDP underneath. Neither one has a handshake the way TCP does QUIC has its own setup process (Initial/Handshake packets) but it's still way different from TCP's three-way handshake.
 
-Screenshot: `screenshots/udp-traffic.png`
+![UDP Traffic](screenshots/udp-traffic.png)
 
 ## TCP Handshake
 Filter used: `tcp.stream eq` (selecting one stream to isolate the handshake packets)
@@ -46,7 +46,7 @@ This shows the three-way handshake clearly:
 
 This is the part that actually proves TCP sets up a connection before sending any real data, unlike UDP which just sends straight away.
 
-Screenshot: `screenshots/tcp-handshake.png`
+![TCP Handshake](screenshots/tcp-handshake.png)
 
 ## Comparison Table
 
